@@ -1,14 +1,15 @@
-import { DeleteOutlined, EditOutlined, HolderOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Space, Typography, Avatar, Tooltip } from 'antd';
+import { DeleteOutlined, EditOutlined, HolderOutlined, UserOutlined, ProjectOutlined } from '@ant-design/icons';
+import { Button, Popconfirm, Space, Typography, Avatar, Tooltip, Tag } from 'antd';
 import { getPriorityMeta } from '../constants/priorities';
 import { USERS } from '../constants/users';
 
 const { Text } = Typography;
 
-export default function TaskCard({ task, statusKey, onEdit, onDelete }) {
+export default function TaskCard({ task, statusKey, onEdit, onDelete, projects = [] }) {
   const priority = getPriorityMeta(task.priority);
   const taskId = `TASK-${task.id}`;
   const assignee = USERS.find(u => u.id === task.assignee);
+  const project = projects.find(p => p.id === task.projectId);
 
   const handleDragStart = (e) => {
     e.dataTransfer.setData('text/plain', JSON.stringify({ taskId: task.id, sourceStatus: statusKey }));
@@ -43,6 +44,14 @@ export default function TaskCard({ task, statusKey, onEdit, onDelete }) {
       <Text style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px', lineHeight: '1.4' }}>
         {task.title}
       </Text>
+
+      <div style={{ marginBottom: '8px' }}>
+        {project && (
+          <Tag icon={<ProjectOutlined />} color="default" style={{ fontSize: '10px' }}>
+            {project.name}
+          </Tag>
+        )}
+      </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Space size={6}>

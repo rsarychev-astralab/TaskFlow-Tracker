@@ -5,7 +5,7 @@ import TaskCard from './TaskCard';
 
 const { Title } = Typography;
 
-export default function StatusColumn({ status, tasks = [], onEdit, onDelete, onMove, onAdd }) {
+export default function StatusColumn({ status, tasks = [], onEdit, onDelete, onMove, onAdd, projects = [] }) {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDragOver = (e) => {
@@ -78,6 +78,7 @@ export default function StatusColumn({ status, tasks = [], onEdit, onDelete, onM
               statusKey={status.key}
               onEdit={onEdit}
               onDelete={onDelete}
+              projects={projects}
             />
           ))
         )}

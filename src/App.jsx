@@ -46,6 +46,7 @@ export default function App() {
     { id: 'p2', name: 'Второй проект', description: 'Описание второго проекта' }
   ]);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
   const [newProject, setNewProject] = useState({ name: '', description: '' });
 
   const openCreateModal = (status = 'backlog') => {
@@ -74,9 +75,24 @@ export default function App() {
   };
 
   const handleCreateProject = () => {
+    handleSaveProject();
+  };
+
+  const handleOpenEditProject = (project) => {
+    setEditingProject(project);
+    setNewProject({ name: project.name, description: project.description });
+    setIsProjectModalOpen(true);
+  };
+
+  const handleSaveProject = () => {
     if (!newProject.name.trim()) return;
-    setProjects([...projects, { ...newProject, id: Date.now().toString() }]);
+    if (editingProject) {
+      setProjects(projects.map(p => p.id === editingProject.id ? { ...p, ...newProject } : p));
+    } else {
+      setProjects([...projects, { ...newProject, id: Date.now().toString() }]);
+    }
     setNewProject({ name: '', description: '' });
+    setEditingProject(null);
     setIsProjectModalOpen(false);
   };
 
@@ -253,6 +269,7 @@ export default function App() {
                 onDelete={deleteTask} 
                 onMove={moveTask} 
                 onAdd={openCreateModal}
+                projects={projects}
               />
             </div>
           )}
